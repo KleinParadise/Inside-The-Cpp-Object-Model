@@ -6,3 +6,26 @@
 5. 如果通过一个函数给静态变量赋值。如 ```foobar().chunkSize = 23;```那么编译器会将其转化为```(void) foobar(); Point3d..chunkSize = 23;```
 
 ### NonStatic Data Members 非静态成员变量
+1. 非静态成员变量存放在每一个class object之中,只能通过显示或隐式的class object来存取它们。
+2. 通过成员函数来处理非静态成员变量,隐式的class object就会调用。即this指针
+3. class object的起始地址加上data member的偏移位置(offset),即可对非成员变量进行存取操作。而非静态成员的偏移位置在编译器可获知。
+```cpp
+origin._y = 0;
+//编译器内部将转化为
+&origin + (&Point3d::_y -1)
+//指向data member的指针,其偏移位置总是会被加1。这样做的目的是使编译器区分
+//一个指向data member的指针,用以指出class的第一个member
+//一个指向data member的指针,没有指出任何member
+```
+4. 以下对非静态成员变量的操作,在存取效率上有什么差异？
+```cpp
+Point3d origin;
+*pt = &origin;
+
+origin.x = 0;
+pt->x = 0 
+```
+当Point3d是一个子类,继承结构中有一个virtual base class并且x是从virtual base class继承而来。此时只有在执行期我们才能知道pt的具体类型,因此无法确定变量
+x的偏移位置(offset),这时候对x的存取效率会比较低。
+
+
