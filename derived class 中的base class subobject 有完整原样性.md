@@ -37,7 +37,7 @@ private:
 Concrete1包含val和c1共5byte,加上边界调整3byte 大小为8byte。  
 Concrete2包含Concrete1和c2共9byte,加上边界调整3byte 大小为12byte。  
 Concrete3包含Concrete2和c3共13byte,加上边界调整3byte 大小为16byte。   
-结构图如下:
+结构图如下:  
 ![Image of cppmode](/pic/datamember_pic2.png)
-出现该结果是为了让derived class 中的base class subobject有其完整原样性。使得基类赋值给子类时,保持子类中基类数据的原样性,同时也不会覆盖子类中的数据。
+出现该结果是为了让derived class 中的base class subobject有其完整原样性。使得基类赋值给子类时,保持子类中基类数据的原样性,同时也不会覆盖子类中的数据。  
 ![Image of cppmode](/pic/datamember_pic1.png)
