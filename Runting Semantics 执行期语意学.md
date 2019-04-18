@@ -85,5 +85,35 @@ void* vec_new(
 )
 
 Point knots[10];
+//上述声明会被编译器变成下面语句
+vec_new(&knots,sizeof(Point),10,&Point::Point,0);
+```
 
+如果Point定义了一个默认析构函数，当knots的生命结束时，那么这个析构函数必须轮流施于数组中每一个元素之上。  
+编译器使用名为'vec_delete()'的函数,析构数组中的每一个class objects。
+```cpp
+void* vec_delete(
+  void *array,//数组的起始地址
+  size_t elem_size,//每个class object的大小
+  int elem_count,//数组中元素的数目
+  void (*destructor)(void*,char),//class 默认析构函数的函数指针
+)
+```
+
+如果程序提供一个或多个明显初值的class object来组成数组,代码如下:
+```cpp
+Point knots[10] = {
+  Point(),
+  Point(1.0,1.0,0.5),
+  1.0,
+}
+```
+上述指定初值的数组会被编译器转换为
+```cpp
+Point knots[10];
+//以下编译器转化为的cpp伪码
+Point::Point(&knots[0]);
+Point::Point(&knots[1],1.0,1.0,0.5);
+Point::Point(&knots[2],1.0,0,0);
+vec_new(&knots,sizeof(Point),10,&Point::Point,0);
 ```
