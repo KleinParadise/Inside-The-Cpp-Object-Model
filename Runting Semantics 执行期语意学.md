@@ -117,3 +117,16 @@ Point::Point(&knots[1],1.0,1.0,0.5);
 Point::Point(&knots[2],1.0,0,0);
 vec_new(&knots,sizeof(Point),10,&Point::Point,0);
 ```
+
+#### 构造函数带参数的数组
+声明一个由class objects所组成的数组,class的构造函数有一个以上的默认参数值。编译器采用的方法是产生一个内部的stub constructor,没有参数。在其函数内部调用由程序员提供的constructor,并将default参数值明确的指定过去。
+```cpp
+complex c_array[10];
+//complex的构造函数
+complex::complex(double=0.0,double=0.0)
+//编译器内部的stubstub constructor 支持上述构造函数的数组构造
+complex::complex(){
+  complex(0.0,0.0);
+}
+```
+
